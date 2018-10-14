@@ -16,9 +16,13 @@ $(function () {
           $(`#build_${index}`).addClass(activity);
         });
 
+      const buildDivAttributes = {
+        id: `build_${index}`,
+        class: build.lastBuildStatus,
+      };
 
       $('#builds')
-        .append($('<div>', { id: `build_${index}` })
+        .append($('<div>', buildDivAttributes)
           .append($('<a>', {
             href: build.webUrl,
             text: build.name,

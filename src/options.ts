@@ -20,10 +20,7 @@ async function save_options() {
 
   const builds = await Promise.all(buildPromises)
 
-  console.log(builds)
-
   chrome.storage.sync.set({
-    urls,
     builds,
   }, () => {
     // Update status to let user know options were saved.
@@ -40,9 +37,10 @@ async function save_options() {
 function restore_options() {
   // Use default value color = 'red' and likesColor = true.
   chrome.storage.sync.get({
-    urls: [],
-  }, ({ urls }) => {
-    $('#circleci_urls').val(urls.join("\n"));
+    builds: [],
+  }, ({ builds }) => {
+    const urls = builds.map((build) => build.xmlUrl).join("\n")
+    $('#circleci_urls').val(urls);
   });
 }
 
