@@ -1,6 +1,7 @@
 import * as $ from 'jquery';
 import { extractProjectData, Build } from './xmlExtract';
 
+
 $(function () {
 
   chrome.storage.sync.get({
@@ -8,12 +9,22 @@ $(function () {
   }, ({ builds }) => {
     builds.forEach((build: Build, index) => {
 
-      $.get(build.xmlUrl).then(extractProjectData);
+      $.get(build.xmlUrl)
+        .then(extractProjectData)
+        .then(({ lastBuildStatus, activity }: Build) => {
+          $(`#build_${index}`).addClass(lastBuildStatus);
+          $(`#build_${index}`).addClass(activity);
+        });
 
-      $('#builds').append($('<li>', {
-        text: build.name,
-        id: `build_${index}`,
-      }));
+
+      $('#builds')
+        .append($('<div>', { id: `build_${index}` })
+          .append($('<a>', {
+            href: build.webUrl,
+            text: build.name,
+            target: '_blank',
+          }))
+        );
 
     });
   });

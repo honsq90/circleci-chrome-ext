@@ -5,15 +5,40 @@
   <meta charset="UTF-8">
   <title>CircleCI Build Monitor</title>
   <style>
+    .builds {
+      color: white;
+    }
+
+    a {
+      color: white
+    }
+
+    [id^=build_] {
+      padding: 5px;
+      border-bottom: solid 1px black;
+      cursor: pointer;
+    }
+
+    .Success {
+      background-color: #00b710;
+    }
+
+    .Failure {
+      background-color: #ff1f1f;
+    }
+
+    .Building {
+      background-color: yellow;
+    }
   </style>
   <script src="js/vendor.js"></script>
 </head>
 
 <body>
   <h2>CircleCI Build Monitor</h1>
-  <ul id="builds" style="min-width: 300px;">
-  </ul>
-  <script src="js/popup.js"></script>
+    <div id="builds" style="min-width: 300px;">
+    </div>
+    <script src="js/popup.js"></script>
 </body>
 
 </html>
