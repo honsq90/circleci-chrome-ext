@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "CircleCI Chrome Extension",
+  "name": "CircleCI Build Monitor",
   "description": "Chrome Extension, TypeScript, Visual Studio Code",
   "version": "1.0",
   "options_ui": {

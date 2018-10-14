@@ -1,16 +1,34 @@
 import * as $ from 'jquery';
+import { extractProjectData } from './xmlExtract';
 
 // Saves options to chrome.storage.sync.
-function save_options() {
-  var color = $('#color').val();
-  var likesColor = $('#like').prop('checked');
+async function save_options() {
+  const rawValue = $('#circleci_urls').val() as string;
+
+  const urls = rawValue.split("\n")
+    .filter((xmlUrl) => xmlUrl.length > 0)
+  // TODO: filter non urls
+  // .filter((xmlUrl) => new URL(xmlUrl));
+
+  const buildPromises = urls.map((xmlUrl) => {
+    return $.get(xmlUrl)
+      .then((xmlData) => ({
+        ...extractProjectData(xmlData),
+        xmlUrl,
+      }));
+  })
+
+  const builds = await Promise.all(buildPromises)
+
+  console.log(builds)
+
   chrome.storage.sync.set({
-    favoriteColor: color,
-    likesColor: likesColor
-  }, function () {
+    urls,
+    builds,
+  }, () => {
     // Update status to let user know options were saved.
-    var status = $('#status');
-    status.text('Options saved.');
+    const status = $('#status');
+    status.text('URLs saved.');
     setTimeout(function () {
       status.text('');
     }, 750);
@@ -22,11 +40,9 @@ function save_options() {
 function restore_options() {
   // Use default value color = 'red' and likesColor = true.
   chrome.storage.sync.get({
-    favoriteColor: 'red',
-    likesColor: true
-  }, function (items: { favoriteColor, likesColor }) {
-    $('#color').val(items.favoriteColor);
-    $('#like').prop('checked', items.likesColor);
+    urls: [],
+  }, ({ urls }) => {
+    $('#circleci_urls').val(urls.join("\n"));
   });
 }
 
