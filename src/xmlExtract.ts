@@ -11,11 +11,6 @@ export interface Build {
   xmlUrl?: string;
 }
 
-export interface SyncState {
-  builds: Build[];
-  lastUpdated: number;
-}
-
 export function appendXmlUrl(xmlUrl) {
   return (build): Build => ({ ...build, xmlUrl })
 }
@@ -38,15 +33,14 @@ export function extractProjectData(xmlData: XMLDocument): Build {
   }
 }
 
-export const buildPoller: Observable<SyncState> =
+export const buildPoller: Observable<Build[]> =
   interval(5000)
     .pipe(
       startWith(0),
       switchMap(() => from(getStorage({ builds: [] })).pipe(
         map(({ builds }) => builds.map((build) => build.xmlUrl)),
         mergeMap((builds) => forkJoin(...builds.map(getBuildPromise))),
-        map((builds) => ({ builds, lastUpdated: Date.now() })),
-        tap((syncState) => chrome.storage.sync.set(syncState)),
+        tap((builds) => chrome.storage.sync.set({ builds })),
       )),
       share(),
     )
