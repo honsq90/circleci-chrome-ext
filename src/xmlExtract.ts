@@ -35,19 +35,14 @@ export function extractProjectData(xmlData: XMLDocument): Build {
 }
 
 export const buildPoller: Observable<SyncState> =
-  from(getStorage({ builds: [] }))
+  interval(5000)
     .pipe(
-      switchMap(({ builds }) => {
-        return interval(5000)
-          .pipe(
-            startWith(0),
-            switchMap(() => of(builds).pipe(
-              map((builds: Build[]) => builds.map((build) => build.xmlUrl)),
-              mergeMap((builds) => forkJoin(...builds.map(getBuildPromise))),
-              map((builds) => ({ builds, lastUpdated: Date.now() })),
-              tap((syncState) => chrome.storage.sync.set(syncState)),
-            )),
-          )
-      }),
+      startWith(0),
+      switchMap(() => from(getStorage({ builds: [] })).pipe(
+        map(({ builds }) => builds.map((build) => build.xmlUrl)),
+        mergeMap((builds) => forkJoin(...builds.map(getBuildPromise))),
+        map((builds) => ({ builds, lastUpdated: Date.now() })),
+        tap((syncState) => chrome.storage.sync.set(syncState)),
+      )),
       share(),
     )
