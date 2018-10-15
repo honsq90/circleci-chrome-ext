@@ -7,7 +7,7 @@ buildPoller
 
     let path = "green.png";
     let color = "#00b710";
-    let text: string = null;
+    let text: string = '';
 
     if (hasFailure) {
       path = "red.png";
