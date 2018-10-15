@@ -1,12 +1,6 @@
-import { getStorage } from './chromeStorage';
+import { buildPoller } from './xmlExtract';
 
-function polling() {
-  getStorage({ builds: [] })
-    .then(({ builds }) => {
-      console.log('polling', builds);
-      setTimeout(polling, 5000);
-    });
-}
-
-polling();
-
+buildPoller
+  .subscribe(() => {
+    console.log('build polled!')
+  })
