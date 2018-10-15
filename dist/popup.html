@@ -5,10 +5,6 @@
   <meta charset="UTF-8">
   <title>CircleCI Build Monitor</title>
   <style>
-    .builds {
-      color: white;
-    }
-
     a {
       color: white
     }
@@ -35,10 +31,14 @@
 </head>
 
 <body>
-  <h2>CircleCI Build Monitor</h1>
-    <div id="builds" style="min-width: 300px;">
-    </div>
-    <script src="js/popup.js"></script>
+  <h2>CircleCI Build Monitor</h2>
+  <div>
+    <span id="update_status">
+    </span>
+  </div>
+  <div id="builds" style="min-width: 300px;">
+  </div>
+  <script src="js/popup.js"></script>
 </body>
 
 </html>

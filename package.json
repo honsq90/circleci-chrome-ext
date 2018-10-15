@@ -14,7 +14,8 @@
     "url": "https://github.com/honsq90/circleci-chrome-ext.git"
   },
   "dependencies": {
-    "jquery": "~3.3.1"
+    "jquery": "~3.3.1",
+    "rxjs": "^6.3.3"
   },
   "husky": {
     "hooks": {
