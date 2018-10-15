@@ -16,10 +16,14 @@ export interface SyncState {
   lastUpdated: number;
 }
 
+export function appendXmlUrl(xmlUrl) {
+  return (build): Build => ({ ...build, xmlUrl })
+}
+
 export function getBuildPromise(xmlUrl: string) {
   return get(xmlUrl)
     .then(extractProjectData)
-    .then((build) => ({ ...build, xmlUrl: xmlUrl }));
+    .then(appendXmlUrl(xmlUrl));
 }
 
 export function extractProjectData(xmlData: XMLDocument): Build {
